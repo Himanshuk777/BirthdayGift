@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy 20th Birthday Dear...</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* REMOVE BLUE HIGHLIGHTING / SELECTION ACROSS ALL PLATFORMS */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-touch-callout: none !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      outline: none !important;
+    }
+
+    body {
+      background-image: linear-gradient(to right top, #1f0537, #380c60, #55108c, #7413bb, #9612eb);
+      min-height: 100vh;
+      font-family: 'Dancing Script', cursive;
+      overflow-x: hidden;
+      color: #fff;
+      position: relative;
+      transition: background 1.5s ease-in-out;
+    }
+
+    /* Cosmic Background after Gift Opens */
+    body.celebrate-bg {
+      background-image: radial-gradient(circle at center bottom, #4c0e75 0%, #1a0229 55%, #08000f 100%);
+    }
+
+    /* Glowing Moon with Craters */
+    .moon {
+      position: fixed;
+      top: 30px;
+      right: 40px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #fdfae7;
+      box-shadow: 0 0 35px rgba(253, 250, 231, 0.8), 0 0 65px rgba(253, 250, 231, 0.4);
+      z-index: 2;
+      opacity: 0;
+      transform: scale(0.5) translateY(-20px);
+      transition: opacity 1.5s ease, transform 1.5s ease;
+      pointer-events: none;
+    }
+
+    .moon.show-moon {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    .crater1, .crater2, .crater3 {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.08);
+      border-radius: 50%;
+    }
+    .crater1 { width: 18px; height: 18px; top: 16px; left: 16px; }
+    .crater2 { width: 12px; height: 12px; top: 46px; left: 34px; }
+    .crater3 { width: 8px; height: 8px; top: 22px; left: 52px; }
+
+    /* Parallax Floating Bokeh Elements */
+    .parallax-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 105, 180, 0.12));
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.25), 0 0 35px rgba(255, 105, 180, 0.25);
+      transition: transform 0.25s ease-out;
+      animation: floatGlitter 4s infinite ease-in-out alternate;
+    }
+
+    @keyframes floatGlitter {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-16px) scale(1.08); }
+    }
+
+    /* Glitter Canvas */
+    #glitterCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* SECTION 1: GIFT UNWRAPPING PAGE */
+    #gift-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .gift-header-wrap {
+      transform: translateY(-75px);
+      margin-bottom: 25px;
+    }
+
+    .gift-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5rem;
+      color: #fff;
+      text-shadow: 0 0 15px #ff416c, 0 0 30px #ff4b2b, 0 0 45px #9612eb;
+      margin-bottom: 12px;
+    }
+
+    .gift-subtext {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 2.5px;
+      color: #ffe6ff;
+      animation: pulseText 2s infinite ease-in-out;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 0.75; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    /* GLOWING GIFT BOX */
+    .gift-box {
+      position: relative;
+      width: 125px;
+      height: 125px;
+      background: linear-gradient(135deg, #ff1361, #fff800);
+      cursor: pointer;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+                  0 0 40px rgba(255, 19, 97, 0.8), 
+                  0 0 65px rgba(255, 248, 0, 0.6);
+      animation: bounceGift 1.8s infinite alternate ease-in-out;
+      transition: transform 0.3s ease;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.08) rotate(-3deg);
+    }
+
+    /* Vertical Ribbon */
+    .gift-box::before {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 100%;
+      background: #ffffff;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+      z-index: 1;
+    }
+
+    /* Horizontal Ribbon */
+    .gift-box::after {
+      content: '';
+      position: absolute;
+      height: 24px;
+      width: 100%;
+      left: 0;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ffffff;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+      z-index: 1;
+    }
+
+    .gift-lid {
+      position: absolute;
+      width: 139px;
+      height: 28px;
+      background: #ff1361;
+      top: -10px;
+      left: -7px;
+      border-radius: 6px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 20px rgba(255, 19, 97, 0.8);
+      z-index: 3;
+    }
+
+    /* SVG BOW INSTEAD OF EMOJI */
+    .gift-bow-svg {
+      position: absolute;
+      top: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 28px;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+      z-index: 4;
+    }
+
+    @keyframes bounceGift {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-20px); }
+    }
+
+    /* SECTION 2: CARD CONTAINER */
+    #card-section {
+      display: none;
+      min-height: 100vh;
+      padding: 30px 15px 50px 15px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 10;
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .card-wrap {
+      perspective: 2000px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .card {
+      position: relative;
+      width: 360px;
+      height: 590px;
+      border-radius: 14px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 35px rgba(150, 18, 235, 0.4);
+      transform-style: preserve-3d;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    /* INSIDE PAGE */
+    .card .inside-page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 14px;
+      border: 6px solid #b871ff;
+      background: linear-gradient(160deg, #ffffff 0%, #f7f1fd 100%);
+      padding: 22px 18px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: inset 0 0 30px rgba(150, 18, 235, 0.08);
+      z-index: 1;
+    }
+
+    /* FRONT COVER (OPENS ON CLICK ONLY) */
+    .card-cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 14px;
+      border: 6px solid #b871ff;
+      transform-origin: left center;
+      transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+      transform-style: preserve-3d;
+      z-index: 2;
+    }
+
+    .card.open .card-cover {
+      transform: rotateY(-172deg);
+    }
+
+    .cover-front {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 8px;
+      background: linear-gradient(rgba(31, 5, 55, 0.45), rgba(116, 19, 187, 0.7)),
+                  url("https://images.unsplash.com/photo-1527481138388-31827a7c94d5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80");
+      background-position: center;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    .cover-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      transform: rotateY(180deg);
+      border-radius: 8px;
+      background: #fbf7ff;
+      border-right: 2px dashed #b97cf0;
+    }
+
+    .imgset img {
+      width: 130px;
+      filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.45));
+    }
+
+    .front-greeting {
+      font-size: 2.3rem;
+      color: #fff;
+      text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9);
+      line-height: 1.25;
+    }
+
+    .front-badge {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(6px);
+      padding: 6px 16px;
+      border-radius: 20px;
+      color: #ffe6ff;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    /* CARD HEADER */
+    .msg-header {
+      border-bottom: 2px dashed #c99afc;
+      padding-bottom: 5px;
+      margin-bottom: 6px;
+    }
+
+    .msg-header h2 {
+      font-size: 1.85rem;
+      color: #6a16a8;
+      line-height: 1.1;
+    }
+
+    .msg-header .alias {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #8c28dd;
+      margin-top: 2px;
+    }
+
+    .msg-header .date-tag {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.72rem;
+      color: #745f80;
+    }
+
+    /* SCROLLABLE DIALOGUE BODY */
+    .scrollable-content {
+      overflow-y: auto;
+      max-height: 390px;
+      padding-right: 6px;
+      margin: 6px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .scrollable-content::-webkit-scrollbar {
+      width: 4px;
+    }
+    .scrollable-content::-webkit-scrollbar-track {
+      background: #f1e4fc;
+      border-radius: 10px;
+    }
+    .scrollable-content::-webkit-scrollbar-thumb {
+      background: #a85cf0;
+      border-radius: 10px;
+    }
+
+    .dialogue-box {
+      font-family: 'Caveat', cursive;
+      font-size: 1.0rem;
+      line-height: 1.3;
+      color: #351a4a;
+    }
+
+    .funny-note {
+      color: #b5179e;
+      font-weight: bold;
+      background: #ffeefa;
+      padding: 2px 5px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .surprise-highlight {
+      color: #7209b7;
+      font-weight: 600;
+      border-left: 3px solid #ff416c;
+      background: #faf3ff;
+      padding: 3px 7px;
+      border-radius: 0 5px 5px 0;
+      font-size: 0.98rem;
+    }
+
+    .photo-note {
+      font-size: 0.92rem;
+      color: #5c188c;
+      background: #f4e8ff;
+      border-left: 3px solid #9612eb;
+      padding: 3px 7px;
+      border-radius: 0 5px 5px 0;
+    }
+
+    /* SIGNATURE: PURE WHITE */
+    .signature-container {
+      margin-top: auto;
+      padding-top: 6px;
+      border-top: 1px solid #e5d3f8;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .signature {
+      background: linear-gradient(135deg, #7b1fa2, #9c27b0);
+      color: #ffffff !important;
+      font-family: 'Dancing Script', cursive;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(123, 31, 162, 0.35);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    @media (max-width: 400px) {
+      .card {
+        width: 310px;
+        height: 570px;
+      }
+      .dialogue-box {
+        font-size: 0.92rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Moon with Craters -->
+  <div class="moon" id="moonElement">
+    <div class="crater1"></div>
+    <div class="crater2"></div>
+    <div class="crater3"></div>
+  </div>
+
+  <!-- Parallax Bokeh Elements -->
+  <div class="parallax-layer" id="parallaxLayer">
+    <div class="bubble" style="width: 80px; height: 80px; top: 10%; left: 12%;"></div>
+    <div class="bubble" style="width: 50px; height: 50px; top: 70%; left: 8%;"></div>
+    <div class="bubble" style="width: 120px; height: 120px; top: 25%; right: 10%;"></div>
+    <div class="bubble" style="width: 65px; height: 65px; top: 80%; right: 18%;"></div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="glitterCanvas"></canvas>
+
+  <!-- STEP 1: GLOWING GIFT SECTION -->
+  <section id="gift-section">
+    <div class="gift-header-wrap">
+      <h1 class="gift-title">A Special Surprise...</h1>
+      <p class="gift-subtext">TAP THE GLOWING GIFT TO UNWRAP</p>
+    </div>
+    
+    <div class="gift-box" id="giftBox" onclick="revealCard()">
+      <!-- Vector Bow Ribbon without any emoji -->
+      <svg class="gift-bow-svg" viewBox="0 0 100 50">
+        <path d="M50 25 C30 2 5 8 18 35 C28 44 42 32 50 25 Z" fill="#ffffff"/>
+        <path d="M50 25 C70 2 95 8 82 35 C72 44 58 32 50 25 Z" fill="#ffffff"/>
+        <circle cx="50" cy="25" r="6" fill="#ff1361"/>
+      </svg>
+      <div class="gift-lid"></div>
+    </div>
+  </section>
+
+  <!-- STEP 2: CARD SECTION (ALL EMOJIS REMOVED) -->
+  <section id="card-section">
+    <div class="card-wrap">
+      <div class="card" id="birthdayCard" onclick="toggleCard()">
+        
+        <!-- INSIDE CARD CONTENT -->
+        <div class="inside-page">
+          <div class="msg-header">
+            <h2>Happy Birthday Dear...</h2>
+            <div class="alias">Jaiyo Sona (Truecaller's Name)</div>
+            <div class="date-tag">Turning 20 Years Old • 18 September</div>
+          </div>
+
+          <!-- Vertically Scrollable Dialogue Body -->
+          <div class="scrollable-content dialogue-box">
+            <p>
+              Happy 20th Birthday! Since we met today on the 18th of September, let’s be totally honest: 
+              <span class="funny-note">I am your birthday gift because I met you today!</span>
+            </p>
+
+            <!-- New line added as requested -->
+            <p class="surprise-highlight">
+              "Everybody tries to wish you earlier, but I am the unique one who feels you differently, even if I wish you at last and before the day ends."
+            </p>
+
+            <p class="surprise-highlight">
+              "I know, I am late to surprise you but trust me, it's worth it."
+            </p>
+
+            <p class="surprise-highlight">
+              "I don't have money now but I have talent and skills so, this is a little bit of my creativity."
+            </p>
+
+            <p>
+              A very important life advice from me: 
+              <span class="funny-note">Don't marry because it destroys your life! Just live-in is way better and chill!</span>
+            </p>
+
+            <p class="surprise-highlight">
+              Also, by the way, you are a teacher and your students must genuinely like you as the perfect SST / History Teacher!
+            </p>
+
+            <p>
+              On a real note, you are just too friendly. I genuinely feel that you make me feel completely different—not like just a friend, family, or ordinary closer ones. It felt truly special meeting you!
+            </p>
+
+            <p>
+              You can forget then nothing happens, but in that conversation of 30 to 40 minutes, we have expressed so many things that we are experienced in our lives.
+            </p>
+
+            <p class="photo-note">
+              "I unfortunately didn't find your photo, otherwise I could have made this surprise even better!"
+            </p>
+          </div>
+
+          <!-- Bottom Right Pure White Signature -->
+          <div class="signature-container">
+            <div class="signature">
+              — Your Friend from Pamgarh
+            </div>
+          </div>
+        </div>
+
+        <!-- FRONT COVER -->
+        <div class="card-cover">
+          <div class="cover-front">
+            <div class="imgset">
+              <img src="https://1.bp.blogspot.com/-Mgj9-rbs65E/XfMoPSD5gtI/AAAAAAAAURk/NBokE2gSS2cTSJ2em5lZ5hJDuTtRN7UVwCLcBGAsYHQ/s1600/2713997.png" alt="Cake Illustration" />
+            </div>
+            <div class="front-greeting">
+              Happy 20th Birthday<br>
+              <span style="color: #ffd700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);">Dear Purvi!</span>
+            </div>
+            <div class="front-badge">18 September • Tap to Open</div>
+          </div>
+
+          <div class="cover-back"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script>
+    /* 1. Unbox Gift: Dynamic Background, Moon, Confetti */
+    function revealCard() {
+      const giftSec = document.getElementById('gift-section');
+      const cardSec = document.getElementById('card-section');
+      const moon = document.getElementById('moonElement');
+      
+      document.body.classList.add('celebrate-bg');
+      fireGlitter();
+
+      giftSec.style.opacity = '0';
+      giftSec.style.transform = 'scale(0.85)';
+      
+      setTimeout(() => {
+        giftSec.style.display = 'none';
+        cardSec.style.display = 'flex';
+        
+        setTimeout(() => {
+          cardSec.style.opacity = '1';
+          cardSec.style.transform = 'scale(1)';
+          moon.classList.add('show-moon');
+        }, 50);
+      }, 600);
+    }
+
+    /* 2. Interactive Card Open/Close Only When Clicked */
+    function toggleCard() {
+      const birthdayCard = document.getElementById('birthdayCard');
+      birthdayCard.classList.toggle('open');
+    }
+
+    /* 3. Parallax Cursor Effect */
+    document.addEventListener('mousemove', (e) => {
+      const x = (window.innerWidth / 2 - e.pageX) / 30;
+      const y = (window.innerHeight / 2 - e.pageY) / 30;
+      const bubbles = document.querySelectorAll('.bubble');
+      bubbles.forEach((b, i) => {
+        const speed = (i + 1) * 0.4;
+        b.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+      });
+
+      const moon = document.getElementById('moonElement');
+      if (moon) {
+        moon.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+      }
+    });
+
+    /* 4. Sparkling Glitter Particle Engine */
+    const canvas = document.getElementById('glitterCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function fireGlitter() {
+      const colors = ['#ff1361', '#fff800', '#00f2fe', '#ffd700', '#ffffff', '#e056fd', '#b871ff'];
+      for (let i = 0; i < 200; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2 + 40,
+          w: Math.random() * 8 + 4,
+          h: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 20,
+          vy: (Math.random() - 0.8) * 22,
+          rotation: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 12,
+          opacity: 1,
+          isGlitter: Math.random() > 0.5
+        });
+      }
+      renderGlitter();
+    }
+
+    function renderGlitter() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.38;
+        p.rotation += p.vRot;
+        p.opacity -= 0.006;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, p.opacity);
+
+        if (p.isGlitter) {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        }
+
+        ctx.restore();
+
+        if (p.opacity <= 0 || p.y > canvas.height) {
+          particles.splice(i, 1);
+        }
+      });
+
+      if (particles.length > 0) {
+        requestAnimationFrame(renderGlitter);
+      }
+    }
+  </script>
+</body>
+</html>
